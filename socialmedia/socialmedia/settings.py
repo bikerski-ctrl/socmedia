@@ -132,3 +132,6 @@ AUTH_USER_MODEL = "user_auth.User"
 
 # E-mail password reset testing
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# Redirect to home URL after login
+LOGIN_REDIRECT_URL = '/'

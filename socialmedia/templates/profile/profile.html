@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}{{object.get_short_name}}'s profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-4">
+        {% if object.profile_picture.exists %}
+        <img src="{{object.profile_picture.url}}"
+        {% else %}
+        <p>Load a profile picture?</p>
+        {% endif %}
+    </div>
+    <div class="col-8">
+        <h1>{{object.get_full_name}}</h1>
+        <h2>@{{object.username}}</h2>
+        <p class="text-secondary">{{object.status}}</p>
+    </div>
+</div>
+<p class="row">{{object.description}}</p>
+{% endblock %}

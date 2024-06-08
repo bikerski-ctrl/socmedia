@@ -12,6 +12,7 @@ class User(AbstractUser):
         _("username"),
         max_length=30,
         unique=True,
+        primary_key=True,
         help_text=_(
             "Required. 30 characters or fewer. Letters, digits and @/./+/-/_ only."
         ),
@@ -22,4 +23,10 @@ class User(AbstractUser):
     )
     description = models.TextField(blank=True)
     status = models.CharField(max_length=511, blank=True)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.ImageField(
+        upload_to='profile_pictures/',
+        null=True,
+        blank=True
+    )
+
+    REQUIRED_FIELDS = ["email", "first_name"]

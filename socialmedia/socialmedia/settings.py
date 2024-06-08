@@ -59,7 +59,7 @@ ROOT_URLCONF = 'socialmedia.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -129,3 +129,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Custom user implementation
 AUTH_USER_MODEL = "user_auth.User"
+
+# E-mail password reset testing
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

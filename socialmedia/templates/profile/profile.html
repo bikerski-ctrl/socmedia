@@ -7,17 +7,30 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-2 profile-picture">
+    <div class="col-xs-12 col-md-3 col-lg-3 profile-picture">
         {% if object.profile_picture %}
         <img class="profile-picture" src="{{object.profile_picture.url}}">
         {% else %}
-        <p>Load a profile picture?</p>
+        <p>No profile picture present</p>
         {% endif %}
     </div>
     <div class="col">
         <h1>{{object.get_full_name}}</h1>
         <h2>@{{object.username}}</h2>
-        <p class="text-secondary">Current status: {{object.status}}</p>
+        {% if request.user.is_authenticated and request.user.pk == object.pk %}
+        <form method="post" action={% url 'change_status' object.pk %} class="row align-items-center">
+            {% csrf_token %}
+            <div class="col-auto text-secondary">Current status:</div>
+            <div class="col-auto">{{object.status}}</div>
+            <div class="col-auto">|</div>
+            <div class="col-auto">
+                <input class="form-control" type="text" name="status" id="status" placeholder="New status">
+            </div>
+            <input class="col-auto btn btn-sm btn-secondary" type="submit" value="Change">
+        </form>
+        {% else %}
+            <p class="text-secondary">Current status: {{object.status}}</p>
+        {% endif %}
     </div>
 </div>
 <p class="row">{{object.description}}</p>

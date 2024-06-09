@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
+{% load myfilters %}
 {% block title %} Log in {% endblock %}
 
 {% block content %}
+
+<h1 class="display-2 text-primary">Log in</h1>
+
 {% if form.errors %}
     <p>There is a problem with your login data. Try again.</p>
 {% endif %}
@@ -12,12 +16,22 @@
 
 <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
-    <p>{{ form.username.label_tag }} {{ form.username }}</p>
-    <p>{{ form.password.label_tag }} {{ form.password }}</p>
-    <input type="submit" value="Log in">
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.errors }}
+            <span class="form-label">{{ field.label_tag}}</span>
+            {{ field|addclass:'form-control' }}
+
+            {% if field.help_text %}
+            <small class="form-text text-muted" id="{{ field.auto_id }}_helptext">
+            {{ field.help_text|safe }}
+            </small>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <input type="submit" class="btn btn-primary mt-3" value="Log in">
+    <a href="{% url 'password_reset' %}" class="btn btn-secondary mt-3">Reset my password</a>
     <input type="hidden" name="next" value="{{ next }}">
 </form>
-
-<p><a href="{% url 'password_reset' %}">Reset my password</a></p>
 
 {% endblock %}

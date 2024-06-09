@@ -3,11 +3,13 @@
 
 {% block title %}{{object.get_short_name}}'s profile{% endblock %}
 
+{% block additional_css %}<link href="{% static 'css/profile.css' %}" rel="stylesheet">{% endblock %}
+
 {% block content %}
 <div class="row">
-    <div class="col-3">
+    <div class="col-2 profile-picture">
         {% if object.profile_picture %}
-        <img src="{{object.profile_picture.url}}">
+        <img class="profile-picture" src="{{object.profile_picture.url}}">
         {% else %}
         <p>Load a profile picture?</p>
         {% endif %}
@@ -15,8 +17,11 @@
     <div class="col">
         <h1>{{object.get_full_name}}</h1>
         <h2>@{{object.username}}</h2>
-        <p class="text-secondary">{{object.status}}</p>
+        <p class="text-secondary">Current status: {{object.status}}</p>
     </div>
 </div>
 <p class="row">{{object.description}}</p>
+<div class="row">
+    <p class="col-12">Consider adding a post!</p>
+</div>
 {% endblock %}

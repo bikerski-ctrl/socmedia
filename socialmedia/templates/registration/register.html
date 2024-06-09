@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Sign up{% endblock title %}
+{% block title %}Register{% endblock title %}
 
 {% block content %}
-<h2 class="display-2 text-primary">Sign up</h2>
+<h2 class="display-2 text-primary">Register</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button class="btn mt-1 btn-primary" type="submit">Sign up</button>
+    <button class="btn mt-1 btn-primary" type="submit">Register</button>
 </form>
 {% endblock content %}

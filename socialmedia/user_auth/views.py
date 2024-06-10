@@ -36,3 +36,19 @@ def update_user_status(request, pk):
     return HttpResponseRedirect(reverse_lazy(
         "profile", kwargs={'pk': user.pk}
     ))
+
+
+# duplicate code: optimize?
+@login_required
+def update_user_description(request, pk):
+    if request.method != "POST":
+        return HttpResponseBadRequest("Unable to process this request.")
+    user = request.user
+    if pk != user.pk:
+        return HttpResponseForbidden("This action is not allowed.")
+    new_description = request.POST.get("description")
+    user.description = new_description
+    user.save()
+    return HttpResponseRedirect(reverse_lazy(
+        "profile", kwargs={'pk': user.pk}
+    ))

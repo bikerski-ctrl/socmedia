@@ -33,7 +33,18 @@
         {% endif %}
     </div>
 </div>
-<p class="row">{{object.description}}</p>
+
+<p class="row">{% if object.description %}{{object.description}}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
+{% if request.user.is_authenticated and request.user.pk == object.pk %}
+<div class="col-auto col-lg-10 align-items-center">
+<form method="post" action="{% url 'change_description' request.user.pk %}">
+    {% csrf_token %}
+    <label for="description" class="form-label">Enter new description:</label>
+    <textarea id="description" name="description" rows="5" cols="33" class="form-control"></textarea>
+    <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
+</form>
+</div>
+{% endif %}
 <div class="row">
     <p class="col-12">Consider adding a post!</p>
 </div>

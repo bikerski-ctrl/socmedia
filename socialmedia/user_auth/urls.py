@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ProfileView, RegisterView, update_user_status
+from .views import ProfileView, RegisterView, update_user_status, update_user_description
 from django.contrib.auth import views as auth_views
 
 urlpatterns = [
@@ -9,4 +9,5 @@ urlpatterns = [
     # MUST BE KEPT LAST
     path('<str:pk>/', ProfileView.as_view(), name="profile"),
     path('<str:pk>/status_update/', update_user_status, name="change_status"),
+    path('<str:pk>/change_description/', update_user_description, name="change_description"),
 ]

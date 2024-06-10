@@ -13,10 +13,10 @@
         {% else %}
         <p>No profile picture present</p>
         {% endif %}
+        <h2>@{{object.username}}</h2>
     </div>
     <div class="col">
         <h1>{{object.get_full_name}}</h1>
-        <h2>@{{object.username}}</h2>
         {% if request.user.is_authenticated and request.user.pk == object.pk %}
         <form method="post" action={% url 'change_status' object.pk %} class="row align-items-center">
             {% csrf_token %}
@@ -31,20 +31,18 @@
         {% else %}
             <p class="text-secondary">Current status: {{object.status}}</p>
         {% endif %}
+        <p>{% if object.description %}<span class="text-secondary">Current description: </span>{{object.description}}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
+        {% if request.user.is_authenticated and request.user.pk == object.pk %}
+        <form method="post" action="{% url 'change_description' request.user.pk %}">
+            {% csrf_token %}
+            <label for="description" class="form-label">Enter new description:</label>
+            <textarea id="description" name="description" rows="3" cols="33" class="form-control"></textarea>
+            <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
+        </form>
+        {% endif %}
     </div>
 </div>
 
-<p class="row">{% if object.description %}{{object.description}}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
-{% if request.user.is_authenticated and request.user.pk == object.pk %}
-<div class="col-auto col-lg-10 align-items-center">
-<form method="post" action="{% url 'change_description' request.user.pk %}">
-    {% csrf_token %}
-    <label for="description" class="form-label">Enter new description:</label>
-    <textarea id="description" name="description" rows="5" cols="33" class="form-control"></textarea>
-    <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
-</form>
-</div>
-{% endif %}
 <div class="row">
     <p class="col-12">Consider adding a post!</p>
 </div>

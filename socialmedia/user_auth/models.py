@@ -34,6 +34,39 @@ class User(AbstractUser):
 
     REQUIRED_FIELDS = ["email", "first_name"]
 
+    def is_subscribed_to(self, user):
+        return Subscription.objects.filter(subscriber=self, subscribed_to=user)
+
+    def has_sent_friend_request(self, user):
+        return FriendRequest.objects.filter(sender=self, receiver=user).exists()
+    
+    def has_recieved_friend_request(self, user):
+        return user.has_sent_friend_request(self)
+
+    def is_friends(self, user):
+        # ?
+        
+
+    def subscribe(self, user):
+        subscription, created = Subscription.objects.get_or_create(subscriber=self, subscribed_to=user)
+        return subscription
+    
+    def add_friend(self, user):
+        # ?
+        friendship = Friendship.objects.get_or_create(user1=self, user2=user)
+        return frienship
+
+    def send_friend_request(self, user):
+        if self.is_friends(user) or self.has_sent_friend_request(user):
+            return
+        if self.has_recieved_friend_request(user):
+            request = FriendRequest.objects.get(sender=user, receiver=self)
+            request.delete()
+            return self.add_friend(user)
+        return FriendRequest(sender=self, receiver=user)
+
+
+
 
 class Subscription(models.Model):
     subscriber = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="subscriptions", on_delete=models.CASCADE)

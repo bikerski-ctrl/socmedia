@@ -1,8 +1,10 @@
-from django.views.generic import DetailView, CreateView
+from django.views.generic import DetailView, CreateView, View
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
-from django.urls import reverse_lazy
+from dja
+ngo.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import User
 from .forms import CustomUserCreationForm
 from django.conf import settings
@@ -21,6 +23,22 @@ class RegisterView(CreateView):
         user = form.save()
         login(self.request, user)
         return HttpResponseRedirect(settings.LOGIN_REDIRECT_URL)
+
+
+class SubscriptionView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def delete(self, request, *args, **kwargs):
+        pass
+
+
+class FriendRequestView(LoginRequiredMixin, View):
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def delete(self, request, *args, **kwargs):
+        pass
 
 
 @login_required
@@ -52,3 +70,8 @@ def update_user_description(request, pk):
     return HttpResponseRedirect(reverse_lazy(
         "profile", kwargs={'pk': user.pk}
     ))
+
+
+@login_required
+def unfriend(request, pk):
+    pass

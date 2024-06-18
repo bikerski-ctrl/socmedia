@@ -44,17 +44,15 @@ class User(AbstractUser):
         return user.has_sent_friend_request(self)
 
     def is_friends(self, user):
-        # ?
-        
+        return self.friends.filter(pk=user.pk).exists()
 
     def subscribe(self, user):
         subscription, created = Subscription.objects.get_or_create(subscriber=self, subscribed_to=user)
         return subscription
     
     def add_friend(self, user):
-        # ?
         friendship = Friendship.objects.get_or_create(user1=self, user2=user)
-        return frienship
+        return friendship
 
     def send_friend_request(self, user):
         if self.is_friends(user) or self.has_sent_friend_request(user):
@@ -64,8 +62,6 @@ class User(AbstractUser):
             request.delete()
             return self.add_friend(user)
         return FriendRequest(sender=self, receiver=user)
-
-
 
 
 class Subscription(models.Model):

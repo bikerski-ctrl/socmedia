@@ -1,10 +1,10 @@
 from django.views.generic import DetailView, CreateView, View
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
-from dja
-ngo.urls import reverse_lazy
+from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
 from .models import User
 from .forms import CustomUserCreationForm
 from django.conf import settings
@@ -27,7 +27,9 @@ class RegisterView(CreateView):
 
 class SubscriptionView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        pass
+        subscriber = request.user
+        user = get_object_or_404(User, pk=request.pk)
+        subscriber.subscribe(user)
 
     def delete(self, request, *args, **kwargs):
         pass

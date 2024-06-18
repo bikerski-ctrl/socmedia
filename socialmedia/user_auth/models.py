@@ -51,6 +51,8 @@ class User(AbstractUser):
         return subscription
     
     def add_friend(self, user):
+        if self == user:
+            return
         friendship = Friendship.objects.get_or_create(user1=self, user2=user)
         return friendship
 

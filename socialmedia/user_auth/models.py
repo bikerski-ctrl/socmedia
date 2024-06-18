@@ -62,10 +62,15 @@ class User(AbstractUser):
         if self.is_friends(user) or self.has_sent_friend_request(user):
             return
         if self.has_recieved_friend_request(user):
-            request = FriendRequest.objects.get(sender=user, receiver=self)
-            request.delete()
+            user.unsend_friend_request(self)
             return self.add_friend(user)
         return FriendRequest(sender=self, receiver=user)
+
+    def unsend_friend_request(self, user):
+        if not self.has_sent_friend_request(user):
+            return
+        request = FriendRequest.objects.get(sender=self, receiver=user)
+        request.delete()
 
 
 class Subscription(models.Model):

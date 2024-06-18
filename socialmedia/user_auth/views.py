@@ -42,10 +42,18 @@ class SubscriptionView(LoginRequiredMixin, View):
 
 class FriendRequestView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        pass
+        user = request.user
+        send_to = get_object_or_404(User, pk=request.pk)
+        user.send_friend_request(send_to)
+        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        return HttpResponseRedirect(response_url)
 
     def delete(self, request, *args, **kwargs):
-        pass
+        user = request.user
+        unsend_to = get_object_or_404(User, pk=request.pk)
+        user.unsend_friend_request(unsend_to)
+        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        return HttpResponseRedirect(response_url)
 
 
 @login_required

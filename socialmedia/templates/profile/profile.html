@@ -18,7 +18,7 @@
     <div class="col">
         <h1>{{object.get_full_name}}</h1>
         {% if request.user.is_authenticated and request.user.pk == object.pk %}
-        <form method="post" action={% url 'change_status' object.pk %} class="row align-items-center">
+        <form method="post" action="{% url 'change_status' object.pk %}" class="row align-items-center">
             {% csrf_token %}
             <div class="col-auto text-secondary">Current status:</div>
             <div class="col-auto">{{object.status}}</div>
@@ -40,10 +40,48 @@
             <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
         </form>
         {% endif %}
+        {% if request.user.is_authenticated and request.user.pk != object.pk %}
+            {% if request.user.is_subscribed_to(object) %}
+            Subscribed
+            <form method="delete" action="{% url 'unsubscribe' object.pk}">
+                {% csrf_token %}
+                <input type="submit" value="Unsubscribe"> 
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'subscribe' object.pk %}">
+                {% csrf_token %}
+                <input type="submit" value="Subscribe">
+            </form>
+            {% endif %}
+
+            {% if request.user.is_friends(object) %}
+            Friends
+            <form method="delete" action="{% url 'break_friendship' object.pk}">
+                {% csrf_token %}
+                <input type="submit" value="Break friendship">
+            </form>
+            {% elif request.user.has_sent_friend_request(object) %}
+            <form method="post" action="{% url 'send_friend_request' object.pk}">
+                {% csrf_token %}
+                <input type="submit" value="Accept friend request">
+            </form> 
+            {% elif request.user.has_received_friend_request(object) %}
+            Sent friend request
+            <form method="delete" action="{% url 'unsend_friend_request' object.pk}">
+                {% csrf_token %}
+                <input type="submit" value="Unsend friend request">
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'send_friend_request' object.pk}">
+                {% csrf_token %}
+                <input type="submit" value="Send friend request">
+            </form> 
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 
 <div class="row">
     <p class="col-12">Consider adding a post!</p>
 </div>
-{% endblock %}
+{% endblock %} 

@@ -30,9 +30,14 @@ class SubscriptionView(LoginRequiredMixin, View):
         subscriber = request.user
         user = get_object_or_404(User, pk=request.pk)
         subscriber.subscribe(user)
+        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        return HttpResponseRedirect(response_url)
 
     def delete(self, request, *args, **kwargs):
-        pass
+        subscription = get_object_or_404(request.user.subscriptions, subscribed_to__pk=request.pk)
+        subscription.delete()
+        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        return HttpResponseRedirect(response_url)
 
 
 class FriendRequestView(LoginRequiredMixin, View):

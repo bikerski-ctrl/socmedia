@@ -35,26 +35,28 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["email", "first_name"]
 
     def is_subscribed_to(self, user):
-        return Subscription.objects.filter(subscriber=self, subscribed_to=user)
+        return Subscription.objects.filter(subscriber=self, subscribed_to=user).exists()
 
     def has_sent_friend_request(self, user):
         return FriendRequest.objects.filter(sender=self, receiver=user).exists()
-    
+
     def has_recieved_friend_request(self, user):
         return user.has_sent_friend_request(self)
 
     def is_friends(self, user):
         return self.friends.filter(pk=user.pk).exists()
 
-    def subscribe(self, user):
-        subscription, created = Subscription.objects.get_or_create(subscriber=self, subscribed_to=user)
-        return subscription
-    
     def add_friend(self, user):
         if self == user:
             return
         friendship = Friendship.objects.get_or_create(user1=self, user2=user)
         return friendship
+
+    # FUNCTIONAL
+
+    def subscribe(self, user):
+        subscription, created = Subscription.objects.get_or_create(subscriber=self, subscribed_to=user)
+        return subscription
 
     def send_friend_request(self, user):
         if self.is_friends(user) or self.has_sent_friend_request(user):
@@ -91,4 +93,3 @@ class FriendRequest(models.Model):
 
     class Meta:
         unique_together = ('sender', 'receiver')
-

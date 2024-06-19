@@ -88,5 +88,5 @@ def update_user_description(request, pk):
 
 
 @login_required
-def unfriend(request, pk):
+def unfriend_user(request, pk):
     pass

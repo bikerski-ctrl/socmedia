@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{object.get_short_name}}'s profile{% endblock %}
+
+{% block additional_css %}<link href="{% static 'css/profile.css' %}" rel="stylesheet">{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12 col-md-3 col-lg-3 profile-picture">
+        {% if object.profile_picture %}
+        <img class="profile-picture image-thumbnail" src="{{object.profile_picture.url}}">
+        {% else %}
+        <p>No profile picture present</p>
+        {% endif %}
+        <h2>@{{object.username}}</h2>
+    </div>
+    <div class="col">
+        <h1>{{object.get_full_name}}</h1>
+        {% if request.user.is_authenticated and request.user.pk == object.pk %}
+        <form method="post" action="{% url 'change_status' object.pk %}" class="row align-items-center">
+            {% csrf_token %}
+            <div class="col-auto text-secondary">Current status:</div>
+            <div class="col-auto">{{object.status}}</div>
+            <div class="col-auto">|</div>
+            <div class="col-auto">
+                <input class="form-control" type="text" name="status" id="status" placeholder="New status">
+            </div>
+            <input class="col-auto btn btn-sm btn-secondary" type="submit" value="Change">
+        </form>
+        {% else %}
+            <p class="text-secondary">Current status: {{object.status}}</p>
+        {% endif %}
+        <p>{% if object.description %}<span class="text-secondary">Current description: </span>{{object.description}}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
+        {% if request.user.is_authenticated and request.user.pk == object.pk %}
+        <form method="post" action="{% url 'change_description' request.user.pk %}">
+            {% csrf_token %}
+            <label for="description" class="form-label">Enter new description:</label>
+            <textarea id="description" name="description" rows="3" cols="33" class="form-control"></textarea>
+            <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
+        </form>
+        {% endif %}
+        {% if request.user.pk != object.pk %}
+            {% if subscribed %}
+            Subscribed
+            <form method="post" action="{% url 'subscription' object.pk 'delete' %}">
+                {% csrf_token %}
+                <input type="submit" value="Unsubscribe"> 
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'subscription' object.pk 'post' %}">
+                {% csrf_token %}
+                <input type="submit" value="Subscribe">
+            </form>
+            {% endif %}
+
+            {% if is_friends %}
+            Friends
+            <form method="post" action="{% url 'unfriend' object.pk%}">
+                {% csrf_token %}
+                <input type="submit" value="Unfriend">
+            </form>
+            {% elif received_friend_request %}
+            <form method="post" action="{% url 'friend_request' object.pk 'post' %}">
+                {% csrf_token %}
+                <input type="submit" value="Accept friend request">
+            </form> 
+            {% elif sent_friend_request %}
+            Sent friend request
+            <form method="post" action="{% url 'friend_request' object.pk 'delete' %}">
+                {% csrf_token %}
+                <input type="submit" value="Unsend friend request">
+            </form>
+            {% else %}
+            <form method="post" action="{% url 'friend_request' object.pk 'post' %}">
+                {% csrf_token %}
+                <input type="submit" value="Send friend request">
+            </form> 
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <p class="col-12">Consider adding a post!</p>
+</div>
+{% endblock %} 

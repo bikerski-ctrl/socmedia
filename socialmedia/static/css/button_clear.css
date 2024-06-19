@@ -1,0 +1,6 @@
+.no-button-look {
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}

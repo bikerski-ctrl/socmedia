@@ -40,39 +40,39 @@
             <input type="submit" class="btn btn-secondary btn mt-3" value="Change description">
         </form>
         {% endif %}
-        {% if request.user.is_authenticated and request.user.pk != object.pk %}
-            {% if request.user.is_subscribed_to(object) %}
+        {% if request.user.pk != object.pk %}
+            {% if subscribed %}
             Subscribed
-            <form method="delete" action="{% url 'subscription' object.pk}">
+            <form method="post" action="{% url 'subscription' object.pk 'delete' %}">
                 {% csrf_token %}
                 <input type="submit" value="Unsubscribe"> 
             </form>
             {% else %}
-            <form method="post" action="{% url 'subscription' object.pk %}">
+            <form method="post" action="{% url 'subscription' object.pk 'post' %}">
                 {% csrf_token %}
                 <input type="submit" value="Subscribe">
             </form>
             {% endif %}
 
-            {% if request.user.is_friends(object) %}
+            {% if is_friends %}
             Friends
-            <form method="delete" action="{% url 'unfriend' object.pk}">
+            <form method="post" action="{% url 'unfriend' object.pk%}">
                 {% csrf_token %}
                 <input type="submit" value="Unfriend">
             </form>
-            {% elif request.user.has_sent_friend_request(object) %}
-            <form method="post" action="{% url 'friend_request' object.pk}">
+            {% elif received_friend_request %}
+            <form method="post" action="{% url 'friend_request' object.pk 'post' %}">
                 {% csrf_token %}
                 <input type="submit" value="Accept friend request">
             </form> 
-            {% elif request.user.has_received_friend_request(object) %}
+            {% elif sent_friend_request %}
             Sent friend request
-            <form method="delete" action="{% url 'friend_request' object.pk}">
+            <form method="post" action="{% url 'friend_request' object.pk 'delete' %}">
                 {% csrf_token %}
                 <input type="submit" value="Unsend friend request">
             </form>
             {% else %}
-            <form method="post" action="{% url 'friend_request' object.pk}">
+            <form method="post" action="{% url 'friend_request' object.pk 'post' %}">
                 {% csrf_token %}
                 <input type="submit" value="Send friend request">
             </form> 

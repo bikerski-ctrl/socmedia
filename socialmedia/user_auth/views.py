@@ -14,6 +14,17 @@ class ProfileView(DetailView):
     model = User
     template_name = 'profile/profile.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        viewer = self.request.user
+        viewed_user = self.get_object()
+        if viewer.is_authenticated:
+            context["subscribed"] = viewer.is_subscribed_to(viewed_user)
+            context["is_friends"] = viewer.is_friends(viewed_user)
+            context["sent_friend_request"] = viewer.has_sent_friend_request(viewed_user)
+            context["received_friend_request"] = viewer.has_received_friend_request(viewed_user)
+        return context
+
 
 class RegisterView(CreateView):
     form_class = CustomUserCreationForm
@@ -26,33 +37,37 @@ class RegisterView(CreateView):
 
 
 class SubscriptionView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, action, *args, **kwargs):
+        if action == "delete":
+            return self.delete(request, pk, *args, **kwargs)
         subscriber = request.user
-        user = get_object_or_404(User, pk=request.pk)
+        user = get_object_or_404(User, pk=pk)
         subscriber.subscribe(user)
-        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        response_url = reverse_lazy("profile", kwargs={'pk': pk})
         return HttpResponseRedirect(response_url)
 
-    def delete(self, request, *args, **kwargs):
-        subscription = get_object_or_404(request.user.subscriptions, subscribed_to__pk=request.pk)
+    def delete(self, request, pk, *args, **kwargs):
+        subscription = get_object_or_404(request.user.subscriptions, subscribed_to__pk=pk)
         subscription.delete()
-        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        response_url = reverse_lazy("profile", kwargs={'pk': pk})
         return HttpResponseRedirect(response_url)
 
 
 class FriendRequestView(LoginRequiredMixin, View):
-    def post(self, request, *args, **kwargs):
+    def post(self, request, pk, action, *args, **kwargs):
+        if action == "delete":
+            self.delete(request, pk, *args, **kwargs)
         user = request.user
-        send_to = get_object_or_404(User, pk=request.pk)
+        send_to = get_object_or_404(User, pk=pk)
         user.send_friend_request(send_to)
-        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        response_url = reverse_lazy("profile", kwargs={'pk': pk})
         return HttpResponseRedirect(response_url)
 
-    def delete(self, request, *args, **kwargs):
+    def delete(self, request, pk, *args, **kwargs):
         user = request.user
-        unsend_to = get_object_or_404(User, pk=request.pk)
+        unsend_to = get_object_or_404(User, pk=pk)
         user.unsend_friend_request(unsend_to)
-        response_url = reverse_lazy("profile", kwargs={'pk': request.pk})
+        response_url = reverse_lazy("profile", kwargs={'pk': pk})
         return HttpResponseRedirect(response_url)
 
 

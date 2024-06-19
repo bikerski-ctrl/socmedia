@@ -40,7 +40,7 @@ class User(AbstractUser):
     def has_sent_friend_request(self, user):
         return FriendRequest.objects.filter(sender=self, receiver=user).exists()
 
-    def has_recieved_friend_request(self, user):
+    def has_received_friend_request(self, user):
         return user.has_sent_friend_request(self)
 
     def is_friends(self, user):
@@ -61,10 +61,12 @@ class User(AbstractUser):
     def send_friend_request(self, user):
         if self.is_friends(user) or self.has_sent_friend_request(user):
             return
-        if self.has_recieved_friend_request(user):
+        if self.has_received_friend_request(user):
             user.unsend_friend_request(self)
             return self.add_friend(user)
-        return FriendRequest(sender=self, receiver=user)
+        request = FriendRequest(sender=self, receiver=user)
+        request.save()
+        return request
 
     def unsend_friend_request(self, user):
         if not self.has_sent_friend_request(user):

@@ -104,4 +104,9 @@ def update_user_description(request, pk):
 
 @login_required
 def unfriend_user(request, pk):
-    pass
+    user = request.user
+    to_unfriend = get_object_or_404(User, pk=pk)
+    user.unfriend_user(to_unfriend)
+    return HttpResponseRedirect(reverse_lazy(
+        "profile", kwargs={'pk': to_unfriend.pk}
+    ))

@@ -73,6 +73,13 @@ class User(AbstractUser):
             return
         request = FriendRequest.objects.get(sender=self, receiver=user)
         request.delete()
+    
+    def unfriend_user(self, user):
+        if self.is_friends(user):
+            Friendship.objects.filter(
+                models.Q(user1=self, user2=user) | models.Q(user1=user, user2=self)
+            ).delete()
+            user.send_friend_request(self)
 
 
 class Subscription(models.Model):

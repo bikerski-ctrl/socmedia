@@ -1,9 +1,10 @@
 from django.db import models
 from django.conf import settings
-from posts.mixin import LikedDislikedMixin
+from posts.mixins import LikedDislikedMixin
+
 
 class Post(LikedDislikedMixin, models.Model):
-    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_like")
     dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_dislike")

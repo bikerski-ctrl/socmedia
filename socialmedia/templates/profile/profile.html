@@ -82,6 +82,14 @@
 </div>
 
 <div class="row">
-    <p class="col-12">Consider adding a post!</p>
+    {% if request.user.is_authenticated and request.user.pk == object.pk %}
+        {% include 'posts/post_create.html' %}
+    {% endif %}
+
+    {% if object.posts %}
+        Some sort of pagination?
+    {% else %}
+        <p>There are currently no posts.</p>
+    {% endif %}
 </div>
 {% endblock %} 

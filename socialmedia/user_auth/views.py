@@ -56,7 +56,7 @@ class SubscriptionView(LoginRequiredMixin, View):
 class FriendRequestView(LoginRequiredMixin, View):
     def post(self, request, pk, action, *args, **kwargs):
         if action == "delete":
-            self.delete(request, pk, *args, **kwargs)
+            return self.delete(request, pk, *args, **kwargs)
         user = request.user
         send_to = get_object_or_404(User, pk=pk)
         user.send_friend_request(send_to)

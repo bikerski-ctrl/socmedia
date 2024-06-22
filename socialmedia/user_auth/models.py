@@ -73,7 +73,7 @@ class User(AbstractUser):
             return
         request = FriendRequest.objects.get(sender=self, receiver=user)
         request.delete()
-    
+
     def unfriend_user(self, user):
         if self.is_friends(user):
             Friendship.objects.filter(

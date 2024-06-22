@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Post #{{object.pk}}{% endblock %}
+
+{% block content %}
+<a href='{% url "profile" object.author.pk%}'>{{object.author.get_full_name}}</a>
+<p>{{object.content}}</p>
+<p>Likes: {{object.number_of_likes}}; dislikes: {{object.number_of_dislikes}}</p>
+<p>Posted at: {{object.posted_at}}</p>
+{% if object.edited %}
+<p>Edited</p>
+{% endif %}
+
+{% include 'posts/comments_part.html' %}
+{% endblock content %}

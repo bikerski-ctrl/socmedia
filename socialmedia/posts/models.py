@@ -1,8 +1,8 @@
 from django.db import models
 from django.conf import settings
+from posts.mixin import LikedDislikedMixin
 
-
-class Post(models.Model):
+class Post(LikedDislikedMixin, models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_like")
@@ -13,7 +13,7 @@ class Post(models.Model):
     image = models.ImageField(blank=True, null=True, upload_to="media/post_images")
 
 
-class Comment(models.Model):
+class Comment(LikedDislikedMixin, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()

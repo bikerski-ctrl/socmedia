@@ -1,0 +1,24 @@
+<h2>Comments</h2>
+{% if object.locked %}
+<p>This post is locked: you cannot add new comments.</p>
+{% else %}
+Form: post comment
+{% endif %}
+
+{% if not comments %}
+<p>There are no comments.</p>
+{% else %}
+
+{% for comment in comments %}
+<div>
+    <a href='{% url "profile" comment.author.pk%}'>{{comment.author.get_full_name}}</a>
+    <p>{{comment.content}}</p>
+    <p>Likes: {{comment.number_of_likes}}; dislikes: {{comment.number_of_dislikes}}</p>
+    <p>Posted at: {{comment.posted_at}}</p>
+    {% if comment.edited %}
+    <p>Edited</p>
+    {% endif %}
+</div>
+{% endfor %}
+
+{% endif %}

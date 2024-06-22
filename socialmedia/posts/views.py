@@ -1,5 +1,6 @@
-from django.views.generic import DetailView, UpdateView
+from django.views.generic import DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment
 from django.urls import reverse_lazy
@@ -16,13 +17,21 @@ class PostDetailView(DetailView):
         return context
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(LoginRequiredMixin, UpdateView):
     model = Post
     form_class = PostForm
-    template_name = "posts/update_post.html"
+    template_name = "posts/post_update.html"
 
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
+
+
+class PostDeleteView(LoginRequiredMixin, DeleteView):
+    model = Post
+    template_name = "posts/post_delete_confirmation.html"
+
+    def get_success_url(self):
+        return self.request.META.get('HTTP_REFERER')
 
 
 @login_required

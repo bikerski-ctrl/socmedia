@@ -3,11 +3,11 @@ from posts.models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
-    image = forms.FileField()
+    image = forms.ImageField()
 
     class Meta:
         model = Post
-        fields = ['content', 'image']
+        fields = ['content', 'locked', 'image']
 
 
 class CommentForm(forms.ModelForm):

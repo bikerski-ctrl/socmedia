@@ -1,27 +1,27 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
 
-{% block title %}{{object.get_short_name}}'s profile{% endblock %}
+{% block title %}{{ object.get_short_name }}'s profile{% endblock title %}
 
-{% block additional_css %}<link href="{% static 'css/profile.css' %}" rel="stylesheet">{% endblock %}
+{% block additional_css %}<link href="{% static 'css/profile.css' %}" rel="stylesheet">{% endblock additional_css %}
 
 {% block content %}
 <div class="row">
     <div class="col-xs-12 col-md-3 col-lg-3 profile-picture">
         {% if object.profile_picture %}
-        <img class="profile-picture image-thumbnail" src="{{object.profile_picture.url}}">
+        <img class="profile-picture image-thumbnail" src="{{ object.profile_picture.url }}">
         {% else %}
         <p>No profile picture present</p>
         {% endif %}
-        <h2>@{{object.username}}</h2>
+        <h2>@{{ object.username }}</h2>
     </div>
     <div class="col">
-        <h1>{{object.get_full_name}}</h1>
+        <h1>{{ object.get_full_name }}</h1>
         {% if request.user.is_authenticated and request.user.pk == object.pk %}
         <form method="post" action="{% url 'change_status' object.pk %}" class="row align-items-center">
             {% csrf_token %}
             <div class="col-auto text-secondary">Current status:</div>
-            <div class="col-auto">{{object.status}}</div>
+            <div class="col-auto">{{ object.status }}</div>
             <div class="col-auto">|</div>
             <div class="col-auto">
                 <input class="form-control" type="text" name="status" id="status" placeholder="New status">
@@ -29,9 +29,9 @@
             <input class="col-auto btn btn-sm btn-secondary" type="submit" value="Change">
         </form>
         {% else %}
-            <p class="text-secondary">Current status: {{object.status}}</p>
+            <p class="text-secondary">Current status: {{ object.status }}</p>
         {% endif %}
-        <p>{% if object.description %}<span class="text-secondary">Current description: </span>{{object.description}}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
+        <p>{% if object.description %}<span class="text-secondary">Current description: </span>{{ object.description }}{% else %}<span class="text-secondary">No description yet!</span>{% endif %}</p>
         {% if request.user.is_authenticated and request.user.pk == object.pk %}
         <form method="post" action="{% url 'change_description' request.user.pk %}">
             {% csrf_token %}
@@ -56,7 +56,7 @@
 
             {% if is_friends %}
             Friends
-            <form method="post" action="{% url 'unfriend' object.pk%}">
+            <form method="post" action="{% url 'unfriend' object.pk %}">
                 {% csrf_token %}
                 <input type="submit" value="Unfriend">
             </form>
@@ -83,13 +83,19 @@
 
 <div class="row">
     {% if request.user.is_authenticated and request.user.pk == object.pk %}
-        {% include 'posts/post_create.html' %}
+        {% include "posts/post_create.html" %}
     {% endif %}
 
-    {% if object.posts %}
-        Some sort of pagination?
+    {% if posts %}
+        {% for post in posts %}
+        <div>
+            <p>{{ post.short_form }}</p>
+            <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+            <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>
+        </div>
+        {% endfor %}
     {% else %}
         <p>There are currently no posts.</p>
     {% endif %}
 </div>
-{% endblock %} 
+{% endblock content %} 

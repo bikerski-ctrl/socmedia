@@ -1,0 +1,14 @@
+<form method="post" action='{% url "post_create" %}' enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="content">Add your post:</label>
+    <textarea id="content" name="content"></textarea>
+    <div>
+        <input type="checkbox" id="locked" name="locked">
+        <label for="locked">Lock the post</label>
+    </div>
+    <div>
+        <input type="file" id="image" name="image">
+        <label for="image">Add an image to your post</label>
+    </div>
+    <input type="submit" value="Post">
+</form>

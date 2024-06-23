@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 
 socialmedia/media/profile_pictures/*
+socialmedia/media/post_images/*

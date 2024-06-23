@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Delete post {{ object.pk }} {% endblock title %}
+
+{% block content %}
+<p>Are you sure you want to delete "{{ object.short_form }}"?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Delete</button>
+    <a href="{% url "post_detail" object.pk %}">Go back to post</a>
+</form>
+{% endblock content %}

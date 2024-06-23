@@ -5,6 +5,7 @@ from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from posts.mixins import UserIsOwnerOrAdminMixin
 
 
 class PostDetailView(DetailView):
@@ -13,11 +14,16 @@ class PostDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        obj = self.object
+        obj.number_of_likes = obj.likes.count()
+        obj.number_of_dislikes = obj.dislikes.count()
+        context["object"] = obj
+        context.update(kwargs)
         context["comments"] = self.object.comments.all()
         return context
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
+class PostUpdateView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, UpdateView):
     model = Post
     form_class = PostForm
     template_name = "posts/post_update.html"
@@ -25,13 +31,17 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('post_detail', kwargs={'pk': self.object.pk})
 
+    def form_valid(self, form):
+        form.instance.edited = True
+        return super().form_valid(form)
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
+
+class PostDeleteView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, DeleteView):
     model = Post
     template_name = "posts/post_delete_confirmation.html"
 
     def get_success_url(self):
-        return self.request.META.get('HTTP_REFERER')
+        return reverse_lazy('main_page')
 
 
 @login_required

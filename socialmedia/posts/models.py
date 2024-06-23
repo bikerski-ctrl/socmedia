@@ -11,7 +11,7 @@ class Post(models.Model):
     posted_at = models.DateTimeField(auto_now_add=True)
     edited = models.BooleanField(default=False)
     locked = models.BooleanField(default=False)
-    image = models.ImageField(blank=True, null=True, upload_to="media/post_images")
+    image = models.ImageField(blank=True, null=True, upload_to="post_images")
 
     class Meta:
         ordering = ["-posted_at"]

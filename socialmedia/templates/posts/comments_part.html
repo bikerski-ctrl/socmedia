@@ -2,7 +2,7 @@
 {% if object.locked %}
 <p>This post is locked: you cannot add new comments.</p>
 {% else %}
-Form: post comment
+{% include "comments/comment_create.html" %}
 {% endif %}
 
 {% if not comments %}

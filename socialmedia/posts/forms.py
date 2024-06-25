@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.instance = kwargs.get('instance', None)
+        self.instance = kwargs.get('instance', self.instance)
 
     def save(self, commit=True):
         post = super().save(commit=False)
@@ -24,6 +24,7 @@ class PostForm(forms.ModelForm):
             post.image = self.instance.image
         if commit:
             post.save()
+            self.save_m2m()
         return post
 
 

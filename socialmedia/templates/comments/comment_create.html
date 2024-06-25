@@ -1,0 +1,5 @@
+<form method="post" action='{% url "comment_create" object.pk %}'>
+    {% csrf_token %}
+    <textarea id="content" name="content"></textarea>
+    <button type="submit">Comment</button>
+</form>

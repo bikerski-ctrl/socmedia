@@ -50,6 +50,28 @@ class PostDeleteView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, DeleteView):
         return reverse_lazy('main_page')
 
 
+class CommentUpdateView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, UpdateView):
+    model = Comment
+    form_class = CommentForm
+    template_name = "comments/comment_update.html"
+
+    def get_success_url(self):
+        return reverse_lazy('post_detail', kwargs={'pk': self.object.post.pk})
+    
+    def form_valid(self, form):
+        form.instance.edited = True
+        return super().form_valid(form)
+
+
+
+class CommentDeleteView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, DeleteView):
+    model = Comment
+    template_name = "comments/comment_delete_confirmation.html"
+
+    def get_success_url(self):
+        return reverse_lazy("post_detail", kwargs={'pk':self.object.post.pk})
+
+
 @login_required
 def post(request):
     if request.method.lower() != "post":

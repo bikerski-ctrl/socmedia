@@ -24,6 +24,11 @@ class LikableModel:
             self.dislikes.remove(user)
         else:
             self.dislikes.add(user)
+    
+    def short_form(self):
+        if len(self.content) <= 200:
+            return str(self.content)
+        return str(self.content)[:200] + '...'
 
 
 class Post(LikableModel, models.Model):
@@ -38,11 +43,6 @@ class Post(LikableModel, models.Model):
 
     class Meta:
         ordering = ["-posted_at"]
-
-    def short_form(self):
-        if len(self.content) <= 200:
-            return str(self.content)
-        return str(self.content)[:200] + '...'
 
 
 class Comment(LikableModel, models.Model):

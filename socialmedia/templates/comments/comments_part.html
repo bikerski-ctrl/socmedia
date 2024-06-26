@@ -10,15 +10,7 @@
 {% else %}
 
 {% for comment in comments %}
-<div>
-    <a href='{% url "profile" comment.author.pk %}'>{{ comment.author.get_full_name }}</a>
-    <p>{{ comment.content }}</p>
-    <p>Likes: {{ comment.number_of_likes }}; dislikes: {{ comment.number_of_dislikes }}</p>
-    <p>Posted at: {{ comment.posted_at }}</p>
-    {% if comment.edited %}
-    <p>Edited</p>
-    {% endif %}
-</div>
+    {% include "comments/comment.html" %}
 {% endfor %}
 
 {% endif %}

@@ -1,0 +1,18 @@
+<div>
+    <a href='{% url "profile" comment.author.pk %}'>{{ comment.author.get_full_name }}</a>
+    <p>{{ comment.content }}</p>
+    <form method ="post" action={% url "react_post_or_comment" "comment" comment.pk "like" %} >
+        <button type="submit">
+            <p>Likes: {{ comment.number_of_likes }}</p>
+        </button>  
+    </form>
+    <form method="post" action="{% url "react_post_or_comment" "comment" comment.pk "dislike" %}">
+        <button type="submit">
+            <p>Dislikes: {{ comment.number_of_dislikes }}</p>
+        </button>
+    </form>
+    <p>Posted at: {{ comment.posted_at }}</p>
+    {% if comment.edited %}
+    <p>Edited</p>
+    {% endif %}
+</div>

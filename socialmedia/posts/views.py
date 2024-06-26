@@ -77,3 +77,19 @@ def post_comment(request, post_pk):
         comment.save()
     url = reverse_lazy("post_detail", kwargs={'pk': post.pk})
     return HttpResponseRedirect(url)
+
+@login_required
+def react_post_comment(request, instance, action, pk):
+    if instance == "post":
+        obj = get_object_or_404(Post, pk=pk)
+    elif instance == "comment":
+        obj = get_object_or_404(Comment, pk=pk)
+    else:
+        return HttpResponseBadRequest()
+    
+    if action == "like":
+        obj.like(request.user)
+    elif action == "dislike":
+        obj.dislike(request.user)
+    
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

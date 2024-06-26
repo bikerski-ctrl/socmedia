@@ -2,7 +2,27 @@ from django.db import models
 from django.conf import settings
 
 
-class Post(models.Model):
+class LikableModel:
+    def disliked_by(user):
+        return self.dislikes.filter(pk=user.pk).exists()
+    
+    def liked_by(user):
+        return self.likes.filter(pk=user.pk).exists()
+
+    def like(self, user):
+        if self.disliked_by(user):
+            self.dislikes.remove(user)
+        if not self.liked_by(user):
+            self.likes.add(user)
+    
+    def dislike(self, user):
+        if self.liked_by(user):
+            self.likes.remove(user)
+        if not self.disliked_by(user):
+            self.dislikes.add(user)
+
+
+class Post(LikableModel, models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_like")
@@ -21,7 +41,7 @@ class Post(models.Model):
         return str(self.content)[:200] + '...'
 
 
-class Comment(models.Model):
+class Comment(LikableModel, models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     content = models.TextField()

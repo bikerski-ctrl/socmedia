@@ -1,12 +1,14 @@
 <div>
     <a href='{% url "profile" comment.author.pk %}'>{{ comment.author.get_full_name }}</a>
     <p>{{ comment.content }}</p>
-    <form method ="post" action={% url "react_post_or_comment" "comment" comment.pk "like" %} >
+    <form method="post" action="{% url "react_post_or_comment" "comment" comment.pk "like" %}">
+        {% csrf_token %}
         <button type="submit">
             <p>Likes: {{ comment.number_of_likes }}</p>
         </button>  
     </form>
     <form method="post" action="{% url "react_post_or_comment" "comment" comment.pk "dislike" %}">
+        {% csrf_token %}
         <button type="submit">
             <p>Dislikes: {{ comment.number_of_dislikes }}</p>
         </button>

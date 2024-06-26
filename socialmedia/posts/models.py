@@ -3,10 +3,10 @@ from django.conf import settings
 
 
 class LikableModel:
-    def disliked_by(user):
+    def disliked_by(self, user):
         return self.dislikes.filter(pk=user.pk).exists()
     
-    def liked_by(user):
+    def liked_by(self, user):
         return self.likes.filter(pk=user.pk).exists()
 
     def like(self, user):

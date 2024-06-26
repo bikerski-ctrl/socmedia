@@ -9,7 +9,18 @@
 {% if object.image %}
 <img src="{{ object.image.url }}" style="max-width: 500px;">
 {% endif %}
-<p>Likes: {{ object.number_of_likes }}; dislikes: {{ object.number_of_dislikes }}</p>
+<form method="post" action="{% url "react_post_or_comment" "post" object.pk "like" %}">
+    {% csrf_token %}
+    <button type="submit">
+        <p>Likes: {{ object.number_of_likes }}</p>
+    </button>  
+</form>
+<form method="post" action="{% url "react_post_or_comment" "post" object.pk "dislike" %}">
+    {% csrf_token %}
+    <button type="submit">
+        <p>Dislikes: {{ object.number_of_dislikes }}</p>
+    </button>
+</form>
 <p>Posted at: {{ object.posted_at }}</p>
 
 {% if object.edited %}

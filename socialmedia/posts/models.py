@@ -12,13 +12,17 @@ class LikableModel:
     def like(self, user):
         if self.disliked_by(user):
             self.dislikes.remove(user)
-        if not self.liked_by(user):
+        if self.liked_by(user):
+            self.likes.remove(user)
+        else:
             self.likes.add(user)
     
     def dislike(self, user):
         if self.liked_by(user):
             self.likes.remove(user)
-        if not self.disliked_by(user):
+        if self.disliked_by(user):
+            self.dislikes.remove(user)
+        else:
             self.dislikes.add(user)
 
 

@@ -163,3 +163,4 @@ cython_debug/
 
 socialmedia/media/profile_pictures/*
 socialmedia/media/post_images/*
+socialmedia/media/community_images/*

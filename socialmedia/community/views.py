@@ -1,5 +1,6 @@
 from django.views.generic import DetailView
 from .models import Community
+from django.db.models import Count
 
 
 class CommunityView(DetailView):

@@ -25,6 +25,7 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/', include('user_auth.urls')),
     path('posts/', include('posts.urls')),
+    path('community/', include('community.urls')),
     path('', TemplateView.as_view(template_name='base.html'), name='main_page'),  # temporary main page
 ]
 

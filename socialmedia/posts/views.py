@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from posts.forms import PostForm, CommentForm
 from posts.models import Post, Comment
+from community.models import Community
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
 from posts.mixins import UserIsOwnerOrAdminMixin
@@ -73,12 +74,15 @@ class CommentDeleteView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, DeleteView)
 
 
 @login_required
-def post(request):
+def post(request, community_id=None):
     if request.method.lower() != "post":
         return HttpResponseForbidden("Only POST requests are allowed.")
     form = PostForm(request.POST, request.FILES)
     post = form.instance
     post.author = request.user
+    if community_id:
+        community = get_object_or_404(Community, id=community_id)
+        post.community = community
     if form.is_valid():
         form.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

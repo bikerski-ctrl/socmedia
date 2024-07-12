@@ -34,7 +34,7 @@ class LikableModel:
 
 class Post(LikableModel, models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts")
-    community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE)
+    community = models.ForeignKey(Community, null=True, on_delete=models.CASCADE, related_name="posts")
     content = models.TextField()
     likes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_like")
     dislikes = models.ManyToManyField(settings.AUTH_USER_MODEL, blank=True, related_name="post_dislike")

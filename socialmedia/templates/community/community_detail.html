@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}{{object.name}}{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="col-xs-12 col-md-3 col-lg-3 profile-picture">
+        {% if object.image %}
+        <img class="image-thumbnail" src="{{ object.o,age.url }}">
+        {% else %}
+        <p>No image present</p>
+        {% endif %}
+        <h2>{{ object.name }}</h2>
+    </div>
+    <div class="col">
+        <p>{{object.description}}</p>
+    </div>
+</div>
+
+<div class="row">
+    {% if posts %}
+        {% for post in posts %}
+        <div>
+            <p>{{ post.short_form }}</p>
+            <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+            <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>There are currently no posts.</p>
+    {% endif %}
+</div>
+{% endblock content %}

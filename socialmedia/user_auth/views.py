@@ -24,7 +24,7 @@ class ProfileView(DetailView):
             context["is_friends"] = viewer.is_friends(viewed_user)
             context["sent_friend_request"] = viewer.has_sent_friend_request(viewed_user)
             context["received_friend_request"] = viewer.has_received_friend_request(viewed_user)
-        context["posts"] = self.get_object().posts.all().annotate(
+        context["posts"] = self.get_object().posts.filter(community=None).all().annotate(
             number_of_likes=Count('likes'),
             number_of_dislikes=Count('dislikes'),
             number_of_comments=Count('comments')

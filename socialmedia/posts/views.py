@@ -1,5 +1,6 @@
 from django.views.generic import DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseForbidden, HttpResponseBadRequest
 from posts.forms import PostForm, CommentForm
@@ -73,20 +74,33 @@ class CommentDeleteView(LoginRequiredMixin, UserIsOwnerOrAdminMixin, DeleteView)
         return reverse_lazy("post_detail", kwargs={'pk':self.object.post.pk})
 
 
-@login_required
-def post(request, community_id=None):
-    if request.method.lower() != "post":
-        return HttpResponseForbidden("Only POST requests are allowed.")
-    form = PostForm(request.POST, request.FILES)
+def save_post_with_author(form, user):
     post = form.instance
-    post.author = request.user
-    if community_id:
-        community = get_object_or_404(Community, id=community_id)
-        post.community = community
+    post.author = user
     if form.is_valid():
         form.save()
+
+
+@login_required
+@require_POST
+def create_post(request):
+    form = PostForm(request.POST, request.FILES)
+    save_post_with_author(form, request.user)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+
+@login_required
+@require_POST
+def create_community_post(request, community_pk):
+    form = PostForm(request.POST, request.FILES)
+    post = form.instance
+    community = get_object_or_404(Community, pk=community_pk)
+    if not community.is_allowed_to_post(request.user):
+        return HttpResponseForbidden("Not allowed to post in this community.")
+    post.community = community
+    save_post_with_author(form, request.user)
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    
 
 @login_required
 def post_comment(request, post_pk):

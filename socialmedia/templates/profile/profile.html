@@ -83,7 +83,9 @@
 
 <div class="row">
     {% if request.user.is_authenticated and request.user.pk == object.pk %}
+    <form method="post" action='{% url "post_create" %}' enctype="multipart/form-data">
         {% include "posts/post_create.html" %}
+    </form>
     {% endif %}
 
     {% if posts %}

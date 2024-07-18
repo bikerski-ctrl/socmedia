@@ -10,3 +10,10 @@ class Community(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(blank=True, null=True, upload_to="community_images")
     only_staff_post = models.BooleanField(default=True)
+
+    def is_allowed_to_post(self, user):
+        if not user.is_authenticated:
+            return False
+        if not self.only_staff_post:
+            return True
+        return self.administrator.pk == user.pk or self.moderator.filter(pk=user.pk).exists()

@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Conversations{% endblock title %}
+
+{% block content %}
+    {% for conversation in object_list %}
+    <div><a href='{% url "conversation_detail" conversation.pk %}'>
+        <p>{{conversation.subject}}</p>
+    </a></div>
+    {% endfor %}
+{% endblock content %}

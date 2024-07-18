@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{object.subject}}{% endblock title %}
+
+{% block content %}
+
+{% for message in object.messages %}
+<div>
+    <h3>{{message.author.username}}</h3>
+    <p>{{message.content}}</p>
+    <p>{{message.timestamp}}</p>
+</div>
+{% endfor %}
+
+{% endblock content %}

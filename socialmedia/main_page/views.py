@@ -15,10 +15,11 @@ class MainPageView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
+        user = self.request.user
         qs = qs.filter(
-            Q(author__subscribers__pk=user.pk) | 
-            Q(author__friends__pk=user.pk) | 
-            Q(community__followers__pk=user.pk)
+            Q(author__subscribers__subscriber=user) | 
+            Q(author__friends=user) | 
+            Q(community__follower=user)
         ).order_by("-posted_at")
         return qs
     

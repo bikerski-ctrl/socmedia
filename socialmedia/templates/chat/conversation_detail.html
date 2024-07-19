@@ -3,12 +3,14 @@
 
 {% block content %}
 
-{% for message in object.messages %}
+{% for message in object.messages.all %}
 <div>
     <h3>{{message.author.username}}</h3>
     <p>{{message.content}}</p>
     <p>{{message.timestamp}}</p>
 </div>
 {% endfor %}
+
+{% include 'chat/send_message_form.html' %}
 
 {% endblock content %}

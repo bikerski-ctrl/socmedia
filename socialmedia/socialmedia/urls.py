@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from main_page.views import MainPageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,7 +27,7 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('community/', include('community.urls')),
     path('chat/', include('chat.urls')),
-    path('', TemplateView.as_view(template_name='base.html'), name='main_page'),  # temporary main page
+    path('', MainPageView.as_view(), name='main_page'), 
 ]
 
 if settings.DEBUG:

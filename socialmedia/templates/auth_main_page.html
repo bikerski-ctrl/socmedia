@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Social media{% endblock title %}
+
+{% block content %}
+    {% for post in object_list %}
+        <div>
+            <h3>{{post.author.username}}</h3>
+            {% if post.community %}<h4>In community "{{post.community.name}}"</h4>{% endif %}
+            <p>{{ post.short_form }}</p>
+            <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+            <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>
+        </div>
+    {% endfor %}
+{% endblock content %}

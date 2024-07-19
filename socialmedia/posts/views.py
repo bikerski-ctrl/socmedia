@@ -2,9 +2,8 @@ from django.views.generic import DetailView, UpdateView, DeleteView
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseForbidden, HttpResponseBadRequest
+from django.http import HttpResponseForbidden, HttpResponseBadRequest, HttpResponseRedirect
 from django.urls import reverse_lazy
-from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Count
 

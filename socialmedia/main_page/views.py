@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.views.generic import ListView
 from posts.models import Post
-from django.db.models import Q
+from django.db.models import Q, Count
 from posts.models import Post
 
 
@@ -20,7 +20,11 @@ class MainPageView(ListView):
             Q(author__subscribers__subscriber=user) | 
             Q(author__friends=user) | 
             Q(community__follower=user)
-        ).order_by("-posted_at")
+        ).order_by("-posted_at").annotate(
+            number_of_likes=Count('likes'),
+            number_of_dislikes=Count('dislikes'),
+            number_of_comments=Count('comments')
+        )
         return qs
     
     def get(self, *args, **kwargs):

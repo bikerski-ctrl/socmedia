@@ -26,6 +26,7 @@
     {% if posts %}
         {% for post in posts %}
         <div>
+            <h3><a href="{% url 'profile' post.author.pk %}">{{post.author.username}}</a></h3>
             <p>{{ post.short_form }}</p>
             <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
             <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>

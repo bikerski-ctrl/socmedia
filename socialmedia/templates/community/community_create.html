@@ -1,0 +1,20 @@
+<form action="{% url 'community_create' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        <label for="text">Name:</label>
+        <input type="text" id="name" name="name">
+    </div>
+    <div>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"></textarea>
+    </div>
+    <div>
+        <label for="image" accept="image/*">Image:</label>
+        <input type="file" id="image" name="image">
+    </div>
+    <div>
+        <input type="checkbox" id="only_staff_post" name="only_staff_post">
+        <label for="only_staff_post">Only staff can post</label>
+    </div>
+    <input type="submit" value="Create">
+</form>

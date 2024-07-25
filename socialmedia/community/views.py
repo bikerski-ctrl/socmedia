@@ -1,8 +1,8 @@
-from django.views.generic import DetailView
+from django.views.generic import DetailView, View
+from django.shortcuts import render
 from .models import Community
 from django.db.models import Count
-from django.contrib.auth.decorators import login_required
-from django.views.decorators.http import require_POST
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommunityForm
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
@@ -22,13 +22,15 @@ class CommunityView(DetailView):
         return context
 
 
-@login_required
-@require_POST
-def create_community(request):
-    form = CommunityForm(request.POST, request.FILES)
-    community = form.instance
-    community.administrator = request.user
-    if form.is_valid():
-        form.save()
-        return HttpResponseRedirect(reverse_lazy('community_detail', pk=community.pk))
-    return HttpResponseBadRequest("Bad form.")
+class CreateCommunityView(LoginRequiredMixin, View):
+    def post(self, request):
+        form = CommunityForm(request.POST, request.FILES)
+        community = form.instance
+        community.administrator = request.user
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse_lazy('community_detail', kwargs={'pk':community.pk}))
+        return HttpResponseBadRequest("Bad form.")
+    
+    def get(self, request):
+        return render(request, "community/community_create.html")

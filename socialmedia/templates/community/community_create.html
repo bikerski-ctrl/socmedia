@@ -1,3 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Create community{% endblock title %}
+
+{% block content %}
+<h1>Create a community</h1>
 <form action="{% url 'community_create' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div>
@@ -18,3 +24,4 @@
     </div>
     <input type="submit" value="Create">
 </form>
+{% endblock content %}

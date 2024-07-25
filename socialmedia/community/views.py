@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, View
+from django.views.generic import DetailView, View, ListView
 from django.shortcuts import render
 from .models import Community
 from django.db.models import Count
@@ -34,3 +34,16 @@ class CreateCommunityView(LoginRequiredMixin, View):
     
     def get(self, request):
         return render(request, "community/community_create.html")
+
+
+class CommunityListView(ListView):
+    model = Community
+    template_name = "community/community_list.html"
+    paginate_by = 20
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        qs = qs.annotate(
+            followers=Count('follower')
+        )
+        return qs.order_by('followers')

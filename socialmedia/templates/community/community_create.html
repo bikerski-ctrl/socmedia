@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Create community{% endblock title %}
+
+{% block content %}
+<h1>Create a community</h1>
+<form action="{% url 'community_create' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+    </div>
+    <div class="form-group">
+        <label for="image">Image:</label>
+        <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+    </div>
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="only_staff_post" name="only_staff_post">
+        <label class="form-check-label" for="only_staff_post">Only staff can post</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+{% endblock content %}

@@ -1,0 +1,27 @@
+<div>
+    <a href='{% url "profile" comment.author.pk %}'>{{ comment.author.get_full_name }}</a>
+    <p>{{ comment.content }}</p>
+    <form method="post" action="{% url "react_post_or_comment" "comment" comment.pk "like" %}">
+        {% csrf_token %}
+        <button type="submit">
+            <p>Likes: {{ comment.number_of_likes }}</p>
+        </button>  
+    </form>
+    <form method="post" action="{% url "react_post_or_comment" "comment" comment.pk "dislike" %}">
+        {% csrf_token %}
+        <button type="submit">
+            <p>Dislikes: {{ comment.number_of_dislikes }}</p>
+        </button>
+    </form>
+    <p>Posted at: {{ comment.posted_at }}</p>
+    {% if comment.edited %}
+    <p>Edited</p>
+    {% endif %}
+
+    {% if request.user.is_authenticated and request.user.pk == comment.author.pk %}
+    <div>
+        <a href="{% url "comment_update" comment.pk %}">Update comment</a>
+        <a href="{% url "comment_delete" comment.pk %}">Delete comment</a>
+    </div>
+    {% endif %}
+</div>

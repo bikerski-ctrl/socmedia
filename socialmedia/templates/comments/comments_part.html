@@ -1,0 +1,16 @@
+<h2>Comments</h2>
+{% if object.locked %}
+<p>This post is locked: you cannot add new comments.</p>
+{% else %}
+{% include "comments/comment_create.html" %}
+{% endif %}
+
+{% if not comments %}
+<p>There are no comments.</p>
+{% else %}
+
+{% for comment in comments %}
+    {% include "comments/comment.html" %}
+{% endfor %}
+
+{% endif %}

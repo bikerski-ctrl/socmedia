@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Update comment {{ form.instance.pk }}{% endblock title %}
+
+{% block content %}
+<h2>Update comment</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <textarea id="content" name="content">{{form.instance.content}}</textarea>
+    <input type="submit" value="Post">
+</form>
+{% endblock content %}

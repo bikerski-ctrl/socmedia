@@ -1,5 +1,6 @@
 from django.views.generic import DetailView, CreateView, View
 from django.http import HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
+from django.db.models import Count
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -23,6 +24,11 @@ class ProfileView(DetailView):
             context["is_friends"] = viewer.is_friends(viewed_user)
             context["sent_friend_request"] = viewer.has_sent_friend_request(viewed_user)
             context["received_friend_request"] = viewer.has_received_friend_request(viewed_user)
+        context["posts"] = self.get_object().posts.filter(community=None).all().annotate(
+            number_of_likes=Count('likes'),
+            number_of_dislikes=Count('dislikes'),
+            number_of_comments=Count('comments')
+        )
         return context
 
 
@@ -56,7 +62,7 @@ class SubscriptionView(LoginRequiredMixin, View):
 class FriendRequestView(LoginRequiredMixin, View):
     def post(self, request, pk, action, *args, **kwargs):
         if action == "delete":
-            self.delete(request, pk, *args, **kwargs)
+            return self.delete(request, pk, *args, **kwargs)
         user = request.user
         send_to = get_object_or_404(User, pk=pk)
         user.send_friend_request(send_to)

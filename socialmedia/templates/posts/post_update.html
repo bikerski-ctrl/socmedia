@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Update post {{ form.instance.pk }}{% endblock title %}
+
+{% block content %}
+<h2>Update post</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="4" required>{{ form.instance.content }}</textarea>
+    </div>
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="locked" name="locked" {% if form.instance.locked %}checked{% endif %}>
+        <label class="form-check-label" for="locked">Lock the post</label>
+    </div>
+    {% if form.instance.image %}
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="delete_image" name="delete_image">
+        <label class="form-check-label" for="delete_image">Delete current image</label>
+    </div>
+    {% endif %}
+    <div class="form-group mb-3">
+        <label for="image">Upload Image</label>
+        <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+    </div>
+    <button type="submit" class="btn btn-primary">Post</button>
+</form>
+{% endblock content %}

@@ -89,15 +89,20 @@
     {% endif %}
 
     {% if posts %}
+    <div class="container-fluid">
         {% for post in posts %}
-        <div>
-            <p>{{ post.short_form }}</p>
-            <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
-            <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>
+        <div class="card mt-4">
+            <div class="card-body">
+                <h3 class="card-title">{{ post.author.username }}</h3>
+                <p class="card-text">{{ post.short_form }}</p>
+                <p class="card-text">Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+                <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Go to post</a>
+            </div>
         </div>
         {% endfor %}
+    </div>
     {% else %}
-        <p>There are currently no posts.</p>
+        <p class="text-muted">There are currently no posts.</p>
     {% endif %}
 </div>
 {% endblock content %} 

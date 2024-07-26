@@ -1,12 +1,14 @@
 {% csrf_token %}
-<label for="content">Add your post:</label>
-<textarea id="content" name="content"></textarea>
-<div>
-    <input type="checkbox" id="locked" name="locked">
-    <label for="locked">Lock the post</label>
+<div class="form-group">
+    <label for="content">Add your post:</label>
+    <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
 </div>
-<div>
-    <input type="file" id="image" name="image">
-    <label for="image" accept="image/*">Add an image to your post</label>
+<div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" id="locked" name="locked">
+    <label class="form-check-label" for="locked">Lock the post</label>
 </div>
-<input type="submit" value="Post">
+<div class="form-group">
+    <label for="image">Add an image to your post</label>
+    <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
+</div>
+<button type="submit" class="btn btn-primary">Post</button>

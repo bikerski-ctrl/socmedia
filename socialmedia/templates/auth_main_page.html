@@ -4,12 +4,20 @@
 
 {% block content %}
     {% for post in object_list %}
-        <div>
-            <h3><a href="{% url 'profile' post.author.pk %}">{{post.author.username}}</a></h3>
-            {% if post.community %}<h4>In community "<a href="{% url 'community_detail' post.community.pk %}">{{post.community.name}}</a>"</h4>{% endif %}
-            <p>{{ post.short_form }}</p>
-            <p>Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
-            <p><a href='{% url "post_detail" post.pk %}'>Go to post</a></p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3 class="card-title">
+                <a href="{% url 'profile' post.author.pk %}" class="text-decoration-none">{{ post.author.username }}</a>
+            </h3>
+            {% if post.community %}
+            <h4 class="card-subtitle mb-2 text-muted">
+                In community "<a href="{% url 'community_detail' post.community.pk %}" class="text-decoration-none">{{ post.community.name }}</a>"
+            </h4>
+            {% endif %}
+            <p class="card-text">{{ post.short_form }}</p>
+            <p class="card-text">Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+            <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Go to post</a>
         </div>
+    </div>
     {% endfor %}
 {% endblock content %}

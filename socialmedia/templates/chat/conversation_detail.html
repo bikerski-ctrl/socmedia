@@ -4,13 +4,19 @@
 {% block content %}
 
 {% for message in object.messages.all %}
-<div>
-    <h3>{{message.author.username}}</h3>
-    <p>{{message.content}}</p>
-    <p>{{message.timestamp}}</p>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">{{ message.author.username }}</h3>
+        <p class="card-text">{{ message.content }}</p>
+        <p class="text-muted">{{ message.timestamp }}</p>
+    </div>
 </div>
 {% endfor %}
 
-{% include 'chat/send_message_form.html' %}
+<div class="row mt-4">
+    <div class="col-12">
+        {% include 'chat/send_message_form.html' %}
+    </div>
+</div>
 
 {% endblock content %}

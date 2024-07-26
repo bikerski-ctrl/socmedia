@@ -5,9 +5,11 @@
 {% block content %}
 <h1>Communities</h1>
 {% for community in object_list %}
-<div>
-    <h2><a href="{% url 'community_detail' community.pk %}">{{community.name}}</a></h2>
-    <p>{{community.description}}</p>
+<div class="card h-100 mb-4">
+    <div class="card-body">
+        <h2 class="card-title"><a href="{% url 'community_detail' community.pk %}">{{ community.name }}</a></h2>
+        <p class="card-text">{{ community.description }}</p>
+    </div>
 </div>
 {% endfor %}
 

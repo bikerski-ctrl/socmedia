@@ -6,21 +6,24 @@
 <h2>Update post</h2>
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <textarea id="content" name="content">{{form.instance.content}}</textarea>
-    <div>
-        <input type="checkbox" id="locked" name="locked" {% if form.instance.locked %}checked{% endif %}>
-        <label for="locked">Lock the post</label>
+    <div class="form-group">
+        <label for="content">Content</label>
+        <textarea class="form-control" id="content" name="content" rows="4" required>{{ form.instance.content }}</textarea>
+    </div>
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="locked" name="locked" {% if form.instance.locked %}checked{% endif %}>
+        <label class="form-check-label" for="locked">Lock the post</label>
     </div>
     {% if form.instance.image %}
-    <div>
-        <label for="delete_image">Delete current image</label>
-        <input type="checkbox" id="delete_image" name="delete_image">
+    <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="delete_image" name="delete_image">
+        <label class="form-check-label" for="delete_image">Delete current image</label>
     </div>
     {% endif %}
-    <div>
-        <input type="file" id="image" name="image">
-        <label for="image" accept="image/*">Upload image</label>
+    <div class="form-group mb-3">
+        <label for="image">Upload Image</label>
+        <input type="file" class="form-control-file" id="image" name="image" accept="image/*">
     </div>
-    <input type="submit" value="Post">
+    <button type="submit" class="btn btn-primary">Post</button>
 </form>
 {% endblock content %}

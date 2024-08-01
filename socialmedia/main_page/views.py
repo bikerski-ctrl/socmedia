@@ -27,7 +27,13 @@ class MainPageView(ListView):
         )
         return qs
     
-    def get(self, *args, **kwargs):
-        if not self.request.user.is_authenticated:
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
             return get_unauth_main_page(self.request)
-        return super().get(*args, **kwargs)
+
+        super().get(request, *args, **kwargs)
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(request, 'main_list.html', context=self.get_context_data())
+
+        return render(request, self.template_name, context=self.get_context_data())

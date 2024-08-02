@@ -1,0 +1,10 @@
+{% for post in posts %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h3 class="card-title"><a href="{% url 'profile' post.author.pk %}">{{ post.author.username }}</a></h3>
+            <p class="card-text">{{ post.short_form }}</p>
+            <p class="card-text">Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
+            <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Go to post</a>
+        </div>
+    </div>
+{% endfor %}

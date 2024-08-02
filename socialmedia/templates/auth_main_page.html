@@ -13,7 +13,7 @@
             <button class="btn btn-primary btn-lg mt-2" onclick="showMore()" id="show-more">Show more</button>
         </div>
     </div>
-    { % endif %}
+    {% endif %}
     <input type="hidden" id="page-current" value="{{page_obj.number}}">
     <input type="hidden" id="page-number" value="{{page_obj.paginator.num_pages}}">
     <script src="{% static 'js/main.js' %}"></script>

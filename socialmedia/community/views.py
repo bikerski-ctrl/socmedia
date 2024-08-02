@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CommunityForm
 from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 
 
 class CommunityView(DetailView):
@@ -14,12 +15,23 @@ class CommunityView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["posts"] = self.get_object().posts.all().order_by("-posted_at").annotate(
+        posts = self.get_object().posts.all().order_by("-posted_at").annotate(
             number_of_likes=Count('likes'),
             number_of_dislikes=Count('dislikes'),
             number_of_comments=Count('comments')
         )
+        paginator = Paginator(posts, 20)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["posts"] = page_obj
         return context
+    
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(request, 'community/community_post_list.html', context=self.get_context_data())
+        return render(request, self.template_name, context=self.get_context_data())
 
 
 class CreateCommunityView(LoginRequiredMixin, View):

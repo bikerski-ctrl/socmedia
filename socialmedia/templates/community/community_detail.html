@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{object.name}}{% endblock title %}
 
@@ -26,16 +27,19 @@
     </div>
     {% endif %}
     {% if posts %}
-        {% for post in posts %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <h3 class="card-title"><a href="{% url 'profile' post.author.pk %}">{{ post.author.username }}</a></h3>
-                <p class="card-text">{{ post.short_form }}</p>
-                <p class="card-text">Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
-                <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Go to post</a>
+        <div class="row post-container">
+            {% include 'community/community_post_list.html' %}
+        </div>
+        {% if posts.paginator.num_pages > 1 %}
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <button class="btn btn-primary btn-lg mt-2" onclick="showMore()" id="show-more">Show more</button>
             </div>
         </div>
-        {% endfor %}
+        {% endif %}
+        <input type="hidden" id="page-current" value="{{posts.number}}">
+        <input type="hidden" id="page-number" value="{{posts.paginator.num_pages}}">
+        <script src="{% static 'js/main.js' %}"></script>
     {% else %}
         <p>There are currently no posts.</p>
     {% endif %}

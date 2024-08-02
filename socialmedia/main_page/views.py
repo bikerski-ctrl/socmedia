@@ -2,7 +2,6 @@ from django.shortcuts import render
 from django.views.generic import ListView
 from posts.models import Post
 from django.db.models import Q, Count
-from posts.models import Post
 
 
 def get_unauth_main_page(request):

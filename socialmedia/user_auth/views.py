@@ -5,7 +5,8 @@ from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render
+from django.core.paginator import Paginator
 from .models import User
 from .forms import CustomUserCreationForm
 from django.conf import settings
@@ -24,12 +25,23 @@ class ProfileView(DetailView):
             context["is_friends"] = viewer.is_friends(viewed_user)
             context["sent_friend_request"] = viewer.has_sent_friend_request(viewed_user)
             context["received_friend_request"] = viewer.has_received_friend_request(viewed_user)
-        context["posts"] = self.get_object().posts.filter(community=None).all().annotate(
+        posts = self.get_object().posts.filter(community=None).all().order_by("-posted_at").annotate(
             number_of_likes=Count('likes'),
             number_of_dislikes=Count('dislikes'),
             number_of_comments=Count('comments')
         )
+        paginator = Paginator(posts, 20)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["posts"] = page_obj
         return context
+    
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
+
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return render(request, 'profile/profile_post_list.html', context=self.get_context_data())
+        return render(request, self.template_name, context=self.get_context_data())
 
 
 class RegisterView(CreateView):

@@ -14,7 +14,7 @@ class CommunityView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["posts"] = self.get_object().posts.all().annotate(
+        context["posts"] = self.get_object().posts.all().order_by("-posted_at").annotate(
             number_of_likes=Count('likes'),
             number_of_dislikes=Count('dislikes'),
             number_of_comments=Count('comments')

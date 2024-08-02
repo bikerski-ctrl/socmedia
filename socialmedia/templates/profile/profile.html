@@ -90,16 +90,19 @@
 
     {% if posts %}
     <div class="container-fluid">
-        {% for post in posts %}
-        <div class="card mt-4">
-            <div class="card-body">
-                <h3 class="card-title">{{ post.author.username }}</h3>
-                <p class="card-text">{{ post.short_form }}</p>
-                <p class="card-text">Likes: {{ post.number_of_likes }}. Dislikes: {{ post.number_of_dislikes }}. Comments: {{ post.number_of_comments }}.</p>
-                <a href="{% url 'post_detail' post.pk %}" class="btn btn-primary">Go to post</a>
+        <div class="row post-container">
+        {% include 'profile/profile_post_list.html' %}
+        </div>
+        {% if posts.paginator.num_pages > 1 %}
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <button class="btn btn-primary btn-lg mt-2" onclick="showMore()" id="show-more">Show more</button>
             </div>
         </div>
-        {% endfor %}
+        {% endif %}
+        <input type="hidden" id="page-current" value="{{posts.number}}">
+        <input type="hidden" id="page-number" value="{{posts.paginator.num_pages}}">
+        <script src="{% static 'js/main.js' %}"></script>
     </div>
     {% else %}
         <p class="text-muted">There are currently no posts.</p>
